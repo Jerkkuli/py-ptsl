@@ -2,7 +2,6 @@
 ptsl Engine - Engine class and context manager
 """
 
-from __future__ import annotations
 from typing import Optional, Tuple, List
 
 from contextlib import contextmanager
@@ -211,6 +210,15 @@ class Engine:
         Export the open session as text.
         """
         return ExportSessionTextBuilder(self)
+
+    def set_track_solo_state(self, tracks: List[str] | List[Track], state: bool):
+        if len(tracks) < 1:
+            return
+        track_names = tracks
+        if isinstance(tracks[0], Track):
+            track_names = [track.name for track in tracks]
+        op = ops.SetTrackSoloState(track_names=track_names, enabled=state)
+        self.client.run(op)
 
     def import_data(self,
                     session_path: str

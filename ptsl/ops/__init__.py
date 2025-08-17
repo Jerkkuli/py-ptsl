@@ -98,3 +98,6 @@ from .zoom_preset import RecallZoomPreset
 from .timeline_selection import SetTimelineSelection, GetTimelineSelection
 
 from .pt_202406_additions import GetSessionSystemDelayInfo
+
+# idk when
+from .set_track_solo_state import SetTrackSoloState

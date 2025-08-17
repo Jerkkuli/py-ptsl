@@ -70,7 +70,7 @@ class Operation(Generic[Q, R]):
 
     def on_empty_response_body(self):
         """
-        The client calls this when the server reponds.
+        The client calls this when the server responds.
         """
         self.response = None  # type: ignore
 

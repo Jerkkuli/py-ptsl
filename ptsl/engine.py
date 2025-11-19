@@ -31,7 +31,6 @@ from ptsl.PTSL_pb2 import SessionAudioFormat, BitDepth, FileLocation, \
     SpotLocationType, Start, TimeCode, \
     TimelineUpdateVideo, SelectionMode
 
-
 @contextmanager
 def open_engine(*args, **kwargs):
     """
@@ -211,13 +210,21 @@ class Engine:
         """
         return ExportSessionTextBuilder(self)
 
-    def set_track_solo_state(self, tracks: List[str] | List[Track], state: bool):
+    def set_track_solo_state(self, tracks: List[Track], enabled: bool):
+        """
+        Set solo states of the given tracks.
+        :param tracks:
+        :param enabled:
+        """
         if len(tracks) < 1:
             return
-        track_names = tracks
-        if isinstance(tracks[0], Track):
-            track_names = [track.name for track in tracks]
-        op = ops.SetTrackSoloState(track_names=track_names, enabled=state)
+        track_names = []
+        for track in tracks:
+            if track.type != TrackType.TT_Master and track.track_attributes.is_inactive == 0 and track.type != TrackType.VideoTrack:
+                track_names.append(track.name)
+
+        op = ops.SetTrackSoloState(track_names=track_names, enabled=enabled)
+
         self.client.run(op)
 
     def import_data(self,
